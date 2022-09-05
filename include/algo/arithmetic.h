@@ -1,9 +1,41 @@
 #ifndef ALGORITHMS_INCLUDE_ALGO_ARITHMETIC_H_
 #define ALGORITHMS_INCLUDE_ALGO_ARITHMETIC_H_
 
-#include <iostream>
+#include <cmath>
 #include <limits>
 #include <type_traits>
+#include <vector>
+
+namespace arithmetic {
+
+class LongInteger final {
+public:
+    LongInteger(long long number);
+    
+    explicit LongInteger(unsigned long long number);
+
+    bool equal(const LongInteger &rhs) const;
+
+    bool less(const LongInteger &rhs) const;
+
+private:
+    std::vector<unsigned long long> integers_;
+    bool signed_;
+};
+
+bool operator<(const LongInteger &lhs, const LongInteger &rhs);
+
+bool operator<=(const LongInteger &lhs, const LongInteger &rhs);
+
+bool operator>(const LongInteger &lhs, const LongInteger &rhs);
+
+bool operator>=(const LongInteger &lhs, const LongInteger &rhs);
+
+bool operator==(const LongInteger &lhs, const LongInteger &rhs);
+
+bool operator!=(const LongInteger &lhs, const LongInteger &rhs);
+
+}  // namespace arithmetic
 
 namespace algo {
 
@@ -26,7 +58,6 @@ T FastPow(const T &val, unsigned pow) {
         return result;
     }
     unsigned pow_mask = 1u << (std::numeric_limits<unsigned>::digits - 1);
-    std::cout << pow_mask << std::endl;
     while (pow_mask != 0) {
         result *= result;
         if ((pow & pow_mask) != 0) {

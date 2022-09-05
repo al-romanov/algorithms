@@ -11,11 +11,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 enable_testing()
 
-file(GLOB SRCS "*.cc")
-add_executable(test ${SRCS})
+file(GLOB TEST_SRCS "*.cc")
+add_executable(test ${TEST_SRCS})
 
 target_link_libraries(
   test
+  algo
   GTest::gtest_main
 )
 
