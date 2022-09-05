@@ -4,56 +4,24 @@
 #include <cmath>
 #include <limits>
 #include <type_traits>
-#include <vector>
-
-namespace arithmetic {
-
-class LongInteger final {
-public:
-    LongInteger(long long number);
-    
-    explicit LongInteger(unsigned long long number);
-
-    bool equal(const LongInteger &rhs) const;
-
-    bool less(const LongInteger &rhs) const;
-
-private:
-    std::vector<unsigned long long> integers_;
-    bool signed_;
-};
-
-bool operator<(const LongInteger &lhs, const LongInteger &rhs);
-
-bool operator<=(const LongInteger &lhs, const LongInteger &rhs);
-
-bool operator>(const LongInteger &lhs, const LongInteger &rhs);
-
-bool operator>=(const LongInteger &lhs, const LongInteger &rhs);
-
-bool operator==(const LongInteger &lhs, const LongInteger &rhs);
-
-bool operator!=(const LongInteger &lhs, const LongInteger &rhs);
-
-}  // namespace arithmetic
 
 namespace algo {
 
 namespace arithmetic {
 
 template <class T, bool = std::is_class_v<T>>
-struct ArithmeticConstants {
-    constexpr static T unit() { return T::unit(); }
+struct ArithmeticTraits {
+    constexpr static T identity() { return T::unit(); }
 };
 
 template <class T>
-struct ArithmeticConstants<T, false> {
-    constexpr static T unit() { return 1; }
+struct ArithmeticTraits<T, false> {
+    constexpr static T identity() { return 1; }
 };
 
-template <class T, class TConstants = ArithmeticConstants<T>>
-T FastPow(const T &val, unsigned pow) {
-    auto result = TConstants::unit();
+template <class T, class TTraits = ArithmeticTraits<T>>
+constexpr T FastPow(const T &val, unsigned pow) {
+    auto result = TTraits::identity();
     if (pow == 0) {
         return result;
     }

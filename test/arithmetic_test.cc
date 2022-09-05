@@ -58,8 +58,8 @@ bool operator==(const MyStruct &lhs, const MyStruct &rhs) {
 }  // namespace details
 
 template <>
-struct algo::arithmetic::ArithmeticConstants<details::MyStruct> {
-    static details::MyStruct unit() {
+struct algo::arithmetic::ArithmeticTraits<details::MyStruct> {
+    static details::MyStruct identity() {
         return details::MyStruct{1};
     }
 };
