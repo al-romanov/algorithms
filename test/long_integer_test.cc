@@ -80,4 +80,13 @@ TEST(LongIntegerTest, SignedAdditionTest) {
     }
     long_out << long_val;
     EXPECT_EQ(long_out.str(), "-12312467689000");
+    long_out.str("");
+    out.str("");
+    auto val3 = 234324324ll;
+    auto val4 = -123124676898977ll;
+    long_val = val3;
+    long_val += val4;
+    out << val3 + val4;
+    long_out << long_val;
+    EXPECT_EQ(long_out.str(), out.str());
 }

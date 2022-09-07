@@ -32,7 +32,6 @@ LongInteger::LongInteger(unsigned long long number) :
 }
 
 LongInteger &LongInteger::operator+=(const LongInteger &rhs) {
-    std::cout << *this << " + " << rhs << std::endl;
     if (signed_ != rhs.signed_) {
         bool prev_signed = signed_;
         SubAsAbsoluteValues_(rhs);
@@ -44,25 +43,26 @@ LongInteger &LongInteger::operator+=(const LongInteger &rhs) {
     return *this;
 }
 
+LongInteger &LongInteger::operator-=(const LongInteger &rhs) {
+    return *this;
+}
+
 void LongInteger::AddAsAbsoluteValues_(const LongInteger &rhs) {
     auto max_size = std::max(numbers_.size(), rhs.numbers_.size());
     numbers_.resize(max_size + 1);
-    auto this_it = numbers_.begin();
     auto remainder = 0ull;
-    for (auto rhs_val : rhs.numbers_) {
-        std::cout << "\t" << *this_it << " + " << rhs_val;
-        *this_it += rhs_val + remainder;
-        remainder = *this_it / module_;
-        *this_it %= module_;
-        std::cout << " = " << *this_it << std::endl;
-        ++this_it;
-    }
-    while (remainder != 0) {
-        *this_it += remainder;
-        remainder = *this_it / module_;
-        *this_it %= module_;
-        ++this_it;
-    }
+    auto it = std::transform(rhs.numbers_.begin(), rhs.numbers_.end(),
+        numbers_.begin(), numbers_.begin(), [&remainder](auto val1, auto val2)
+    {
+        auto res = val1 + val2 + remainder;
+        remainder = res / module_;
+        return res % module_;
+    });
+    std::transform(it, numbers_.end(), it, [&remainder](auto val) {
+        auto res = val + remainder;
+        remainder = res / module_;
+        return res % module_;
+    });
     if (numbers_.back() == 0) {
         numbers_.pop_back();
     }
@@ -72,30 +72,30 @@ void LongInteger::SubAsAbsoluteValues_(const LongInteger &rhs) {
     auto max_size = std::max(numbers_.size(), rhs.numbers_.size());
     numbers_.resize(max_size);
     signed_ = false;
-    auto this_it = numbers_.begin();
     auto remainder = 0ull;
-    for (auto rhs_val : rhs.numbers_) {
-        std::cout << "\t" << *this_it << " - " << rhs_val;
+    std::transform(rhs.numbers_.begin(), rhs.numbers_.end(),
+        numbers_.begin(), numbers_.begin(), [&remainder](auto val1, auto val2)
+    {
         auto current_remainder = remainder;
-        remainder = *this_it < rhs_val + remainder ? 1 : 0;
-        *this_it += module_ - rhs_val - current_remainder;
-        *this_it %= module_;
-        std::cout << " = " << *this_it << std::endl;
-        ++this_it;
-    }
+        remainder = val2 < val1 + remainder ? 1 : 0;
+        return (val2 + module_ - val1 - current_remainder) % module_;
+    });
     if (remainder != 0) {
-        remainder = 0;
-        auto rhs_it = rhs.numbers_.begin();
-        for (auto &&val : numbers_) {
-            val = module_ - val - remainder;
-            std::cout << "\t(" << val << ")\n";
-            remainder |= 1ull;
-        }
+        ToComplement_();
         signed_ = true;
     }
-    while (numbers_.back() == 0 && numbers_.size() > 0) {
+    while (numbers_.back() == 0 && numbers_.size() > 1) {
         numbers_.pop_back();
     }
+}
+
+void LongInteger::ToComplement_() {
+    auto it = numbers_.begin();
+    *it = (module_ - *it) % module_;
+    ++it;
+    std::transform(it, numbers_.end(), it, [](auto val) {
+        return module_ - val - 1;
+    });
 }
 
 void LongInteger::Abs() noexcept {

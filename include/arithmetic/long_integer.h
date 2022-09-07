@@ -17,6 +17,8 @@ public:
 
     LongInteger &operator+=(const LongInteger &rhs);
 
+    LongInteger &operator-=(const LongInteger &rhs);
+
     void Abs() noexcept;
 
     void Print(std::ostream &out) const;
@@ -29,6 +31,8 @@ private:
     void AddAsAbsoluteValues_(const LongInteger &rhs);
 
     void SubAsAbsoluteValues_(const LongInteger &rhs);
+
+    void ToComplement_();
 
 private:
     std::vector<unsigned long long> numbers_;
