@@ -29,22 +29,23 @@ class LongInteger final {
   bool Less(const LongInteger &rhs) const;
 
  private:
-  void AddAsAbsoluteValues_(const LongInteger &rhs);
+  void AddAsAbsoluteValues(const LongInteger &rhs);
 
-  void SubAsAbsoluteValues_(const LongInteger &rhs);
+  void SubAsAbsoluteValues(const LongInteger &rhs);
 
-  void ToComplement_();
+  void ToComplement();
 
- private:
   std::vector<uint64_t> numbers_;
   bool signed_;
-  constexpr static uint32_t n_digits_in_number_ =
+  constexpr static uint32_t kNDigitsInNumber =
       std::numeric_limits<uint64_t>::digits10 / 2 - 1;
-  constexpr static uint64_t module_ =
-      algo::arithmetic::FastPow(10ull, n_digits_in_number_);
+  constexpr static uint64_t kModule =
+      algo::arithmetic::FastPow(10ULL, kNDigitsInNumber);
 };
 
 LongInteger operator+(const LongInteger &lhs, const LongInteger &rhs);
+
+LongInteger operator-(const LongInteger &lhs, const LongInteger &rhs);
 
 bool operator<(const LongInteger &lhs, const LongInteger &rhs);
 

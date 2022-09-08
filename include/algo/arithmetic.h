@@ -5,9 +5,7 @@
 #include <limits>
 #include <type_traits>
 
-namespace algo {
-
-namespace arithmetic {
+namespace algo::arithmetic {
 
 template <class T, bool = std::is_class_v<T>>
 struct ArithmeticTraits {
@@ -25,7 +23,7 @@ constexpr T FastPow(const T &val, unsigned pow) {
   if (pow == 0) {
     return result;
   }
-  unsigned pow_mask = 1u << (std::numeric_limits<unsigned>::digits - 1);
+  auto pow_mask = 1U << (std::numeric_limits<unsigned>::digits - 1);
   while (pow_mask != 0) {
     result *= result;
     if ((pow & pow_mask) != 0) {
@@ -36,8 +34,6 @@ constexpr T FastPow(const T &val, unsigned pow) {
   return result;
 }
 
-}  // namespace arithmetic
-
-}  // namespace algo
+}  // namespace algo::arithmetic
 
 #endif  // ALGORITHMS_INCLUDE_ALGO_ARITHMETIC_H_
