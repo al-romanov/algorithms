@@ -1,44 +1,47 @@
 #ifndef ALGORITHMS_INCLUDE_ARITHMETIC_LONG_INTEGER_H_
 #define ALGORITHMS_INCLUDE_ARITHMETIC_LONG_INTEGER_H_
 
+#include <cstdint>
 #include <iostream>
 #include <limits>
 #include <vector>
 
-#include <algo/arithmetic.h>
+#include "algo/arithmetic.h"
 
 namespace arithmetic {
 
 class LongInteger final {
-public:
-    LongInteger(long long number = 0);
-    
-    explicit LongInteger(unsigned long long number);
+ public:
+  LongInteger(int64_t number = 0);
 
-    LongInteger &operator+=(const LongInteger &rhs);
+  explicit LongInteger(uint64_t number);
 
-    LongInteger &operator-=(const LongInteger &rhs);
+  LongInteger &operator+=(const LongInteger &rhs);
 
-    void Abs() noexcept;
+  LongInteger &operator-=(const LongInteger &rhs);
 
-    void Print(std::ostream &out) const;
+  void Abs() noexcept;
 
-    bool Equal(const LongInteger &rhs) const;
+  void Print(std::ostream &out) const;
 
-    bool Less(const LongInteger &rhs) const;
+  bool Equal(const LongInteger &rhs) const;
 
-private:
-    void AddAsAbsoluteValues_(const LongInteger &rhs);
+  bool Less(const LongInteger &rhs) const;
 
-    void SubAsAbsoluteValues_(const LongInteger &rhs);
+ private:
+  void AddAsAbsoluteValues_(const LongInteger &rhs);
 
-    void ToComplement_();
+  void SubAsAbsoluteValues_(const LongInteger &rhs);
 
-private:
-    std::vector<unsigned long long> numbers_;
-    bool signed_;
-    constexpr static unsigned n_digits_in_number_ = std::numeric_limits<unsigned long long>::digits10 / 2 - 1;
-    constexpr static unsigned module_ = algo::arithmetic::FastPow(10u, n_digits_in_number_);
+  void ToComplement_();
+
+ private:
+  std::vector<uint64_t> numbers_;
+  bool signed_;
+  constexpr static uint32_t n_digits_in_number_ =
+      std::numeric_limits<uint64_t>::digits10 / 2 - 1;
+  constexpr static uint64_t module_ =
+      algo::arithmetic::FastPow(10ull, n_digits_in_number_);
 };
 
 LongInteger operator+(const LongInteger &lhs, const LongInteger &rhs);
