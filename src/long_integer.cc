@@ -54,21 +54,19 @@ void LongInteger::AddAsAbsoluteValues(const LongInteger &rhs) {
   auto max_size = std::max(numbers_.size(), rhs.numbers_.size());
   numbers_.resize(max_size + 1);
   auto remainder = 0ULL;
-  auto it =
-      std::transform(rhs.numbers_.begin(), rhs.numbers_.end(), numbers_.begin(),
-                     numbers_.begin(), [&remainder](auto val1, auto val2) {
-                       auto res = val1 + val2 + remainder;
-                       remainder = res / kModule;
-                       return res % kModule;
-                     });
+  auto it = numbers_.begin();
+  for (auto val : rhs.numbers_) {
+    *it += val + remainder;
+    remainder = *it / kModule;
+    *it %= kModule;
+    ++it;
+  }
   std::transform(it, numbers_.end(), it, [&remainder](auto val) {
     auto res = val + remainder;
     remainder = res / kModule;
     return res % kModule;
   });
-  if (numbers_.back() == 0) {
-    numbers_.pop_back();
-  }
+  if (numbers_.back() == 0) { numbers_.pop_back(); }
 }
 
 void LongInteger::SubAsAbsoluteValues(const LongInteger &rhs) {
@@ -76,19 +74,18 @@ void LongInteger::SubAsAbsoluteValues(const LongInteger &rhs) {
   numbers_.resize(max_size);
   signed_ = false;
   auto remainder = 0ULL;
-  std::transform(rhs.numbers_.begin(), rhs.numbers_.end(), numbers_.begin(),
-                 numbers_.begin(), [&remainder](auto val1, auto val2) {
-                   auto current_remainder = remainder;
-                   remainder = val2 < val1 + remainder ? 1 : 0;
-                   return (val2 + kModule - val1 - current_remainder) % kModule;
-                 });
+  auto it = numbers_.begin();
+  for (auto val : rhs.numbers_) {
+    auto current_remainder = remainder;
+    remainder = *it < val + remainder ? 1 : 0;
+    *it = (*it + kModule - val - current_remainder) % kModule;
+    ++it;
+  }
   if (remainder != 0) {
     ToComplement();
     signed_ = true;
   }
-  while (numbers_.back() == 0 && numbers_.size() > 1) {
-    numbers_.pop_back();
-  }
+  while (numbers_.back() == 0 && numbers_.size() > 1) { numbers_.pop_back(); }
 }
 
 void LongInteger::ToComplement() {
@@ -102,9 +99,7 @@ void LongInteger::ToComplement() {
 void LongInteger::Abs() noexcept { signed_ = false; }
 
 void LongInteger::Print(std::ostream &out) const {
-  if (signed_) {
-    out << "-";
-  }
+  if (signed_) { out << "-"; }
   auto it = numbers_.rbegin();
   out << *it;
   ++it;
@@ -114,33 +109,25 @@ void LongInteger::Print(std::ostream &out) const {
 }
 
 bool LongInteger::Equal(const LongInteger &rhs) const {
-  if (signed_ != rhs.signed_) {
-    return false;
-  }
+  if (signed_ != rhs.signed_) { return false; }
   return numbers_ == rhs.numbers_;
 }
 
 bool LongInteger::Less(const LongInteger &rhs) const {
-  if (signed_ && !rhs.signed_) {
-    return true;
-  }
-  if (!signed_ && rhs.signed_) {
-    return false;
-  }
-  if (signed_) {
-    return numbers_ > rhs.numbers_;
-  }
+  if (signed_ && !rhs.signed_) { return true; }
+  if (!signed_ && rhs.signed_) { return false; }
+  if (signed_) { return numbers_ > rhs.numbers_; }
   return numbers_ < rhs.numbers_;
 }
 
 LongInteger operator+(const LongInteger &lhs, const LongInteger &rhs) {
-  LongInteger res{lhs};
+  LongInteger res{ lhs };
   res += rhs;
   return res;
 }
 
 LongInteger operator-(const LongInteger &lhs, const LongInteger &rhs) {
-  LongInteger res{lhs};
+  LongInteger res{ lhs };
   res -= rhs;
   return res;
 }
