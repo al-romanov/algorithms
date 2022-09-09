@@ -5,107 +5,117 @@
 #include <string>
 
 TEST(LongIntegerTest, EqualTest) {
-  arithmetic::LongInteger val2 = 1223;
-  arithmetic::LongInteger val3 = 1223;
+  constexpr int64_t kVal = 1223;
+  arithmetic::LongInteger val2 = kVal;
+  arithmetic::LongInteger val3 = kVal;
   EXPECT_TRUE(val2 == val3);
   EXPECT_TRUE(val2 == val2);
 }
 
 TEST(LongIntegerTest, LessTest) {
-  arithmetic::LongInteger val1 = 123;
-  arithmetic::LongInteger val2 = 1223;
+  constexpr auto kVal1 = 123;
+  constexpr auto kVal2 = 1223;
+  arithmetic::LongInteger val1 = kVal1;
+  arithmetic::LongInteger val2 = kVal2;
   EXPECT_TRUE(val1 < val2);
 }
 
 TEST(LongIntegerTest, GreaterTest) {
-  arithmetic::LongInteger val1 = -123;
-  arithmetic::LongInteger val2 = 1223u;
-  arithmetic::LongInteger val3 = 123;
+  constexpr auto kVal1 = -123;
+  constexpr auto kVal2 = 1223;
+  constexpr auto kVal3 = 123;
+  arithmetic::LongInteger val1 = kVal1;
+  arithmetic::LongInteger val2 = kVal2;
+  arithmetic::LongInteger val3 = kVal3;
   EXPECT_TRUE(val2 > val1);
   EXPECT_TRUE(val2 > val3);
 }
 
 TEST(LongIntegerTest, PrintTest) {
-  auto val = 23423ull;
-  arithmetic::LongInteger long_val = val;
+  constexpr auto kVal1 = 23423;
+  arithmetic::LongInteger val = kVal1;
+  std::ostringstream k_out;
   std::ostringstream out;
-  std::ostringstream long_out;
+  k_out << kVal1;
   out << val;
-  long_out << long_val;
-  EXPECT_EQ(out.str(), long_out.str());
+  EXPECT_EQ(k_out.str(), out.str());
+  k_out.str("");
   out.str("");
-  long_out.str("");
-  val = 123124676898977887ull;
-  long_val = val;
+  constexpr auto kVal2 = 123124676898977887;
+  val = kVal2;
+  k_out << kVal2;
   out << val;
-  long_out << long_val;
-  EXPECT_EQ(out.str(), long_out.str());
+  EXPECT_EQ(k_out.str(), out.str());
 }
 
 TEST(LongIntegerTest, UnsignedAdditionTest) {
-  auto val1 = 23423, val2 = 93783655;
-  arithmetic::LongInteger long_val = val1;
-  long_val += val2;
+  constexpr auto kVal1 = 23423;
+  constexpr auto kVal2 = 93783655;
+  arithmetic::LongInteger val = kVal1;
+  val += kVal2;
+  std::ostringstream k_out;
   std::ostringstream out;
-  std::ostringstream long_out;
-  out << val1 + val2;
-  long_out << long_val;
-  EXPECT_EQ(out.str(), long_out.str());
-  long_out.str("");
-  auto val = 1231246768989778ull;
-  long_val = 0;
-  for (unsigned i = 0; i < 1000; ++i) {
-    long_val += val;
+  k_out << kVal1 + kVal2;
+  out << val;
+  EXPECT_EQ(k_out.str(), out.str());
+  out.str("");
+  val = 0;
+  constexpr auto kVal3 = 1231246768989778;
+  constexpr auto kTimes = 1000;
+  for (unsigned i = 0; i < kTimes; ++i) {
+    val += kVal3;
   }
-  long_out << long_val;
-  EXPECT_EQ(long_out.str(), "1231246768989778000");
+  out << val;
+  EXPECT_EQ(out.str(), "1231246768989778000");
 }
 
 TEST(LongIntegerTest, SignedAdditionTest) {
-  auto val1 = 23423, val2 = -93783655;
-  arithmetic::LongInteger long_val = val1;
-  long_val += val2;
+  constexpr auto kVal1 = 23423;
+  constexpr auto kVal2 = -93783655;
+  arithmetic::LongInteger val =kVal1;
+  val += kVal2;
+  std::ostringstream k_out;
   std::ostringstream out;
-  std::ostringstream long_out;
-  out << val1 + val2;
-  long_out << long_val;
-  EXPECT_EQ(out.str(), long_out.str());
-  long_out.str("");
-  auto val = -12312467689;
-  long_val = 0;
-  for (unsigned i = 0; i < 1000; ++i) {
-    val = val;
-    long_val += val;
-  }
-  long_out << long_val;
-  EXPECT_EQ(long_out.str(), "-12312467689000");
-  long_out.str("");
+  k_out << kVal1 + kVal2;
+  out << val;
+  EXPECT_EQ(out.str(), k_out.str());
   out.str("");
-  auto val3 = 234324324ll;
-  auto val4 = -123124676898977ll;
-  long_val = val3;
-  long_val += val4;
-  out << val3 + val4;
-  long_out << long_val;
-  EXPECT_EQ(long_out.str(), out.str());
+  val = 0;
+  constexpr auto kVal3 = -12312467689;
+  constexpr auto kTimes = 1000;
+  for (unsigned i = 0; i < kTimes; ++i) {
+    val += kVal3;
+  }
+  out << val;
+  EXPECT_EQ(out.str(), "-12312467689000");
+  k_out.str("");
+  out.str("");
+  constexpr auto kVal4 = 234324324;
+  constexpr auto kVal5 = -123124676898977;
+  val = kVal4;
+  val += kVal5;
+  k_out << kVal4 + kVal5;
+  out << val;
+  EXPECT_EQ(k_out.str(), out.str());
 }
 
 TEST(LongIntegerTest, SubstractionTest) {
-  auto val1 = 23123123233423, val2 = -937831233223655;
-  arithmetic::LongInteger long_val = val1;
-  long_val -= val2;
+  constexpr auto kVal1 = 23123123233423;
+  constexpr auto kVal2 = -937831233223655;
+  arithmetic::LongInteger val = kVal1;
+  val -= kVal2;
+  std::ostringstream k_out;
   std::ostringstream out;
-  std::ostringstream long_out;
-  out << val1 - val2;
-  long_out << long_val;
-  EXPECT_EQ(out.str(), long_out.str());
-  long_out.str("");
+  k_out << kVal1 - kVal2;
+  out << val;
+  EXPECT_EQ(k_out.str(), out.str());
+  k_out.str("");
   out.str("");
-  val1 = -937831233223655;
-  val2 = 23123123233423;
-  long_val = val1;
-  long_val -= val2;
-  out << val1 - val2;
-  long_out << long_val;
-  EXPECT_EQ(out.str(), long_out.str());
+  constexpr auto kVal3 = -937831233223655;
+  constexpr auto kVal4 = 23123123233423;
+  val = kVal3;
+  val -= kVal4;
+  k_out << kVal3 - kVal4;
+  out << val;
+  EXPECT_EQ(k_out.str(), out.str());
 }

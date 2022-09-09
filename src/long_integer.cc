@@ -19,15 +19,6 @@ LongInteger::LongInteger(int64_t number) : signed_(number < 0) {
   }
 }
 
-LongInteger::LongInteger(uint64_t number) : signed_(false) {
-  numbers_.push_back(number % kModule);
-  number /= kModule;
-  while (number != 0) {
-    numbers_.push_back(number % kModule);
-    number /= kModule;
-  }
-}
-
 LongInteger &LongInteger::operator+=(const LongInteger &rhs) {
   if (signed_ != rhs.signed_) {
     bool prev_signed = signed_;

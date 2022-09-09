@@ -14,8 +14,6 @@ class LongInteger final {
  public:
   LongInteger(int64_t number = 0);
 
-  explicit LongInteger(uint64_t number);
-
   LongInteger &operator+=(const LongInteger &rhs);
 
   LongInteger &operator-=(const LongInteger &rhs);

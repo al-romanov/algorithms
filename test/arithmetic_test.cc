@@ -2,40 +2,28 @@
 #include <gtest/gtest.h>
 
 TEST(PowTest, Pow0Test) {
-  unsigned val = 6;
-  val = algo::arithmetic::FastPow(val, 0);
-  EXPECT_EQ(val, 1);
+  EXPECT_EQ(algo::arithmetic::FastPow(6, 0), 1);
 }
 
 TEST(PowTest, Val1Test) {
-  unsigned val = 1;
-  val = algo::arithmetic::FastPow(val, 23);
-  EXPECT_EQ(val, 1);
+  EXPECT_EQ(algo::arithmetic::FastPow(1, 23), 1);
 }
 
 TEST(PowTest, Val0Test) {
-  unsigned val = 0;
-  val = algo::arithmetic::FastPow(val, 23);
-  EXPECT_EQ(val, 0);
+  EXPECT_EQ(algo::arithmetic::FastPow(0, 23), 0);
 }
 
 TEST(PowTest, UnsignedPow) {
-  unsigned val = 6;
-  unsigned pow = 4;
-  val = algo::arithmetic::FastPow(val, pow);
-  EXPECT_EQ(val, 1296);
+  EXPECT_EQ(algo::arithmetic::FastPow(6U, 4), 1296);
 }
 
 TEST(PowTest, DoublePow) {
-  double val = 6;
-  val = algo::arithmetic::FastPow(val, 4);
-  EXPECT_DOUBLE_EQ(val, 1296);
+  EXPECT_DOUBLE_EQ(algo::arithmetic::FastPow(6.0, 4), 1296);
 }
 
 TEST(PowTest, SignedTest) {
-  unsigned val = -6;
-  val = algo::arithmetic::FastPow(val, 2);
-  EXPECT_EQ(val, 36);
+  constexpr int kVal = -6;
+  EXPECT_EQ(algo::arithmetic::FastPow(kVal, 2), 36);
 }
 
 namespace details {
@@ -63,8 +51,7 @@ struct algo::arithmetic::ArithmeticTraits<details::MyStruct> {
 };
 
 TEST(PowTest, CustomArithmeticConstantsTest) {
-  details::MyStruct val{2};
-  val = algo::arithmetic::FastPow(val, 5);
+  const details::MyStruct val{2};
   const details::MyStruct correct_res{32};
-  EXPECT_EQ(val, correct_res);
+  EXPECT_EQ(algo::arithmetic::FastPow(val, 5), correct_res);
 }
