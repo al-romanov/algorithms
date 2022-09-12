@@ -1,6 +1,7 @@
 #include "arithmetic/long_integer.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstdint>
 #include <iomanip>
@@ -41,10 +42,32 @@ LongInteger &LongInteger::operator-=(const LongInteger &rhs) {
   return *this;
 }
 
+LongInteger &LongInteger::operator*=(const LongInteger &rhs) {
+  LongInteger res;
+  res.numbers_.resize(numbers_.size() + rhs.numbers_.size());
+  auto res_it = res.numbers_.begin();
+  for (auto val1 : rhs.numbers_) {
+    auto out_it = res_it;
+    uint64_t remainder = 0;
+    for (auto val2 : numbers_) {
+      auto res = *out_it + val1 * val2 + remainder;
+      remainder = res / kModule;
+      *out_it = res % kModule;
+      std::cout << *out_it << std::endl;
+      ++out_it;
+    }
+    *out_it += remainder;
+    ++res_it;
+  }
+  std::swap(res, *this);
+  while (numbers_.back() == 0 && numbers_.size() > 1) { numbers_.pop_back(); }
+  return *this;
+}
+
 void LongInteger::AddAsAbsoluteValues(const LongInteger &rhs) {
   auto max_size = std::max(numbers_.size(), rhs.numbers_.size());
   numbers_.resize(max_size + 1);
-  auto remainder = 0ULL;
+  uint64_t remainder = 0;
   auto it = numbers_.begin();
   for (auto val : rhs.numbers_) {
     *it += val + remainder;
@@ -64,7 +87,7 @@ void LongInteger::SubAsAbsoluteValues(const LongInteger &rhs) {
   auto max_size = std::max(numbers_.size(), rhs.numbers_.size());
   numbers_.resize(max_size);
   signed_ = false;
-  auto remainder = 0ULL;
+  uint64_t remainder = 0;
   auto it = numbers_.begin();
   for (auto val : rhs.numbers_) {
     auto current_remainder = remainder;

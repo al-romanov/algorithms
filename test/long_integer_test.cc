@@ -1,3 +1,4 @@
+#include <algo/arithmetic.h>
 #include <arithmetic/long_integer.h>
 #include <gtest/gtest.h>
 
@@ -62,9 +63,7 @@ TEST(LongIntegerTest, UnsignedAdditionTest) {
   val = 0;
   constexpr auto kVal3 = 1231246768989778;
   constexpr auto kTimes = 1000;
-  for (unsigned i = 0; i < kTimes; ++i) {
-    val += kVal3;
-  }
+  for (unsigned i = 0; i < kTimes; ++i) { val += kVal3; }
   out << val;
   EXPECT_EQ(out.str(), "1231246768989778000");
 }
@@ -72,7 +71,7 @@ TEST(LongIntegerTest, UnsignedAdditionTest) {
 TEST(LongIntegerTest, SignedAdditionTest) {
   constexpr auto kVal1 = 23423;
   constexpr auto kVal2 = -93783655;
-  arithmetic::LongInteger val =kVal1;
+  arithmetic::LongInteger val = kVal1;
   val += kVal2;
   std::ostringstream k_out;
   std::ostringstream out;
@@ -83,9 +82,7 @@ TEST(LongIntegerTest, SignedAdditionTest) {
   val = 0;
   constexpr auto kVal3 = -12312467689;
   constexpr auto kTimes = 1000;
-  for (unsigned i = 0; i < kTimes; ++i) {
-    val += kVal3;
-  }
+  for (unsigned i = 0; i < kTimes; ++i) { val += kVal3; }
   out << val;
   EXPECT_EQ(out.str(), "-12312467689000");
   k_out.str("");
@@ -118,4 +115,15 @@ TEST(LongIntegerTest, SubstractionTest) {
   k_out << kVal3 - kVal4;
   out << val;
   EXPECT_EQ(k_out.str(), out.str());
+}
+
+TEST(LongIntegerTest, PowTest) {
+  constexpr auto kVal1 = 1234235435;
+  constexpr auto kPow1 = 2;
+  arithmetic::LongInteger val{ kVal1 };
+  std::ostringstream out;
+  val = algo::arithmetic::FastPow(val, kPow1);
+  std::string answer1 = "1523337109009639225";
+  out << val;
+  EXPECT_EQ(out.str(), answer1);
 }
