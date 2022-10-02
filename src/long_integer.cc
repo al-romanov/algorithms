@@ -130,8 +130,14 @@ bool LongInteger::Equal(const LongInteger &rhs) const {
 bool LongInteger::Less(const LongInteger &rhs) const {
   if (signed_ && !rhs.signed_) { return true; }
   if (!signed_ && rhs.signed_) { return false; }
-  if (signed_) { return numbers_ > rhs.numbers_; }
-  return numbers_ < rhs.numbers_;
+  auto first = numbers_.rbegin();
+  auto last = numbers_.rend();
+  auto rhs_first = rhs.numbers_.rbegin();
+  auto rhs_last = rhs.numbers_.rend();
+  if (signed_) {
+    return std::lexicographical_compare(rhs_first, rhs_last, first, last);
+  }
+  return std::lexicographical_compare(first, last, rhs_first, rhs_last);
 }
 
 LongInteger operator+(const LongInteger &lhs, const LongInteger &rhs) {
